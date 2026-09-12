@@ -274,7 +274,7 @@ void network_player_update(void) {
     }
 }
 
-extern bool gCurrentlyJoining;
+extern bool gReceivedPlayerList;
 u8 network_player_connected(enum NetworkPlayerType type, u8 globalIndex, u8 modelIndex, const struct PlayerPalette* palette, const char* name, const char* discordId) {
     if (globalIndex >= MAX_PLAYERS) {
         LOG_ERROR("refusing player with invalid global index %u", globalIndex);
@@ -385,7 +385,7 @@ u8 network_player_connected(enum NetworkPlayerType type, u8 globalIndex, u8 mode
     }
 
     // display connected popup
-    if (!gCurrentlyJoining && type != NPT_SERVER && (gNetworkType != NT_SERVER || type != NPT_LOCAL)) {
+    if (gReceivedPlayerList && type != NPT_SERVER && (gNetworkType != NT_SERVER || type != NPT_LOCAL)) {
         construct_player_popup(np, DLANG(NOTIF, CONNECTED), NULL);
     }
     LOG_INFO("player connected, local %d, global %d", localIndex, np->globalIndex);

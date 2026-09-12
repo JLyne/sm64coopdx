@@ -462,6 +462,7 @@ static void network_players_reconcile_completed_roster(void) {
     }
 }
 
+extern bool gReceivedPlayerList;
 void network_receive_network_players(struct Packet* p) {
     LOG_INFO("receiving network player chunk");
     if (gNetworkType != NT_CLIENT) {
@@ -695,4 +696,5 @@ void network_receive_network_players(struct Packet* p) {
         generation,
         connectedCount
     );
+    gReceivedPlayerList = true;
 }
