@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 #include "network.h"
+#include "packets/packet.h"
 #include "pc/configfile.h"
 
 #define UNKNOWN_LOCAL_INDEX ((u8)-1)
@@ -83,6 +84,8 @@ u8 network_player_connected_count(void);
 void network_player_set_description(struct NetworkPlayer* np, const char* description, u8 r, u8 g, u8 b, u8 a);
 /* |description|Overrides the location of `np`|descriptionEnd| */
 void network_player_set_override_location(struct NetworkPlayer *np, const char *location);
+/* |description|Kicks `np`|descriptionEnd| */
+void network_player_kick(struct NetworkPlayer *np, enum KickReasonType reason);
 
 /* |description|Gets a network player from `globalIndex`|descriptionEnd| */
 struct NetworkPlayer* network_player_from_global_index(u8 globalIndex);

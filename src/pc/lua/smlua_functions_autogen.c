@@ -14,6 +14,8 @@
 #include "src/game/rumble_init.h"
 #include "src/pc/commands.h"
 #include "src/pc/djui/djui_popup.h"
+#include "src/pc/network/network_player.h"
+#include "src/pc/network/packets/packet.h"
 #include "src/pc/network/network_utils.h"
 #include "src/pc/djui/djui_console.h"
 #include "src/pc/djui/djui_chat_message.h"
@@ -22496,6 +22498,38 @@ int smlua_func_network_player_from_global_index(lua_State* L) {
     return 1;
 }
 
+int smlua_func_network_player_kick(lua_State* L) {
+    if (L == NULL) { return 0; }
+
+    int top = lua_gettop(L);
+    if (top != 2) {
+        LOG_LUA_LINE("Improper param count for '%s': Expected %u, Received %u", "network_player_kick", 2, top);
+        return 0;
+    }
+
+    struct NetworkPlayer* np = (struct NetworkPlayer*)smlua_to_cobject(L, 1, LOT_NETWORKPLAYER);
+    if (!gSmLuaConvertSuccess) { LOG_LUA("Failed to convert parameter %u for function '%s'", 1, "network_player_kick"); return 0; }
+    enum KickReasonType reason = smlua_to_integer(L, 2);
+    if (!gSmLuaConvertSuccess) { LOG_LUA("Failed to convert parameter %u for function '%s'", 1, "network_player_kick"); return 0; }
+
+    if (!network_is_server()) {
+        LOG_LUA("network_player_kick must be called on the server");
+        return 0;
+    }
+
+    if (np == NULL)     { return 0; }
+    if (!np->connected) { return 0; }
+
+    if (np->type == NPT_LOCAL) {
+        LOG_LUA("Cannot kick the local player");
+        return 0;
+    }
+
+    network_player_kick(np, reason);
+
+    return 0;
+}
+
 int smlua_func_get_network_player_from_level(lua_State* L) {
     if (L == NULL) { return 0; }
 
@@ -37715,6 +37749,7 @@ void smlua_bind_functions_autogen(void) {
     smlua_bind_function(L, "network_player_set_description", smlua_func_network_player_set_description);
     smlua_bind_function(L, "network_player_set_override_location", smlua_func_network_player_set_override_location);
     smlua_bind_function(L, "network_player_from_global_index", smlua_func_network_player_from_global_index);
+    smlua_bind_function(L, "network_player_kick", smlua_func_network_player_kick);
     smlua_bind_function(L, "get_network_player_from_level", smlua_func_get_network_player_from_level);
     smlua_bind_function(L, "get_network_player_from_area", smlua_func_get_network_player_from_area);
     smlua_bind_function(L, "get_network_player_smallest_global", smlua_func_get_network_player_smallest_global);

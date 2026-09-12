@@ -3175,6 +3175,19 @@
 
 <br />
 
+## packet.h
+
+### enum KickReasonType
+| Identifier | Value |
+| :--------- |:------|
+| EKT_CLOSE_CONNECTION | 0     |
+| EKT_FULL_PARTY | 1     |
+| EKT_KICKED | 2     |
+| EKT_BANNED | 3     |
+| EKT_REJOIN | 4     |
+
+[:arrow_up_small:](#)
+
 ## player_palette.h
 - PALETTES_DIRECTORY
 - MAX_PRESET_PALETTES

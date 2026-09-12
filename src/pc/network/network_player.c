@@ -115,6 +115,24 @@ struct NetworkPlayer *network_player_from_global_index(u8 globalIndex) {
     return NULL;
 }
 
+void network_player_kick(struct NetworkPlayer *np, enum KickReasonType reason) {
+    if (gNetworkType != NT_SERVER) {
+        LOG_ERROR("refusing to kick player from a client");
+        return;
+    }
+
+    if (np == NULL)     { return; }
+    if (!np->connected) { return; }
+
+    if (np->type == NPT_LOCAL) {
+        LOG_ERROR("refusing to kick local player");
+        return;
+    }
+
+    network_send_kick(np->localIndex, reason);
+    network_player_disconnected(np->localIndex);
+}
+
 struct NetworkPlayer *get_network_player_from_level(s16 courseNum, s16 actNum, s16 levelNum) {
     for (s32 i = 0; i < MAX_PLAYERS; i++) {
         struct NetworkPlayer *np = &gNetworkPlayers[i];

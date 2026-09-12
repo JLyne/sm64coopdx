@@ -1314,6 +1314,30 @@ Gets a network player from `globalIndex`
 
 <br />
 
+## network_player_kick
+
+### Description
+Kicks a network player
+
+### Lua Example
+`network_player_kick(np, reason)`
+
+### Parameters
+| Field  | Type                                               |
+|--------|----------------------------------------------------|
+| np     | [NetworkPlayer](structs.md#NetworkPlayer)          |
+| reason | [enum KickReasonType](constants.md#enum-KickReasonType) |
+
+### Returns
+- None
+
+### C Prototype
+`void network_player_kick(struct NetworkPlayer *np, enum KickReasonType reason);`
+
+[:arrow_up_small:](#)
+
+<br />
+
 ## get_network_player_from_level
 
 ### Description
