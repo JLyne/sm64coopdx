@@ -10871,6 +10871,20 @@ function sequence_player_get_mute_volume_scale(player)
     -- ...
 end
 
+--- @param players integer
+--- @param save boolean
+--- Updates the servers's max player count. Must be called from the server.
+function server_set_max_players(players, save)
+    -- ...
+end
+
+--- @param np NetworkPlayer
+--- @param reason KickReasonType
+--- Kicks a player with the given reason. Must be called from the server.
+function server_kick_player(np, reason)
+    -- ...
+end
+
 --- @param index integer
 --- @return Animation
 --- Gets a vanilla mario Animation with `index`

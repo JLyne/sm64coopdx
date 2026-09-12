@@ -1841,6 +1841,12 @@
 
 <br />
 
+- server.h
+   - [server_set_max_players](functions-6.md#server_set_max_players)
+   - [server_kick_player](functions-6.md#server_kick_player)
+
+<br />
+
 - smlua_anim_utils.h
    - [get_mario_vanilla_animation](functions-6.md#get_mario_vanilla_animation)
    - [smlua_anim_util_set_animation](functions-6.md#smlua_anim_util_set_animation)

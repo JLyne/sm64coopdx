@@ -57,6 +57,7 @@
 #include "src/pc/network/sync_object.h"
 #include "src/audio/load.h"
 #include "src/pc/djui/djui_gfx.h"
+#include "src/pc/network/server.h"
 
 
   ///////////////
@@ -29388,6 +29389,48 @@ int smlua_func_sequence_player_get_mute_volume_scale(lua_State* L) {
     return 1;
 }
 
+  //////////////
+ // server.h //
+//////////////
+
+int smlua_func_server_set_max_players(lua_State* L) {
+    if (L == NULL) { return 0; }
+
+    int top = lua_gettop(L);
+    if (top != 2) {
+        LOG_LUA_LINE("Improper param count for '%s': Expected %u, Received %u", "server_set_max_players", 2, top);
+        return 0;
+    }
+
+    u8 players = smlua_to_integer(L, 1);
+    if (!gSmLuaConvertSuccess) { LOG_LUA("Failed to convert parameter %u for function '%s'", 1, "server_set_max_players"); return 0; }
+    bool save = smlua_to_boolean(L, 2);
+    if (!gSmLuaConvertSuccess) { LOG_LUA("Failed to convert parameter %u for function '%s'", 2, "server_set_max_players"); return 0; }
+
+    server_set_max_players(players, save);
+
+    return 0;
+}
+
+int smlua_func_server_kick_player(lua_State* L) {
+    if (L == NULL) { return 0; }
+
+    int top = lua_gettop(L);
+    if (top != 2) {
+        LOG_LUA_LINE("Improper param count for '%s': Expected %u, Received %u", "server_kick_player", 2, top);
+        return 0;
+    }
+
+    struct NetworkPlayer* np = (struct NetworkPlayer*)smlua_to_cobject(L, 1, LOT_NETWORKPLAYER);
+    if (!gSmLuaConvertSuccess) { LOG_LUA("Failed to convert parameter %u for function '%s'", 1, "server_kick_player"); return 0; }
+    enum KickReasonType reason = smlua_to_integer(L, 2);
+    if (!gSmLuaConvertSuccess) { LOG_LUA("Failed to convert parameter %u for function '%s'", 2, "server_kick_player"); return 0; }
+
+    server_kick_player(np, reason);
+
+    return 0;
+}
+
   ////////////////////////
  // smlua_anim_utils.h //
 ////////////////////////
@@ -38097,6 +38140,10 @@ void smlua_bind_functions_autogen(void) {
     smlua_bind_function(L, "sequence_player_get_fade_volume", smlua_func_sequence_player_get_fade_volume);
     smlua_bind_function(L, "sequence_player_set_fade_volume", smlua_func_sequence_player_set_fade_volume);
     smlua_bind_function(L, "sequence_player_get_mute_volume_scale", smlua_func_sequence_player_get_mute_volume_scale);
+
+    // server.h
+    smlua_bind_function(L, "server_set_max_players", smlua_func_server_set_max_players);
+    smlua_bind_function(L, "server_kick_player", smlua_func_server_kick_player);
 
     // smlua_anim_utils.h
     smlua_bind_function(L, "get_mario_vanilla_animation", smlua_func_get_mario_vanilla_animation);
