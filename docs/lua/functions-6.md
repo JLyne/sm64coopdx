@@ -6163,6 +6163,60 @@ Gets the mute volume scale of `player`
 <br />
 
 ---
+# functions from server.h
+
+<br />
+
+
+## server_set_max_players
+
+### Description
+Updates the servers's max player count. Must be called from the server.
+
+### Lua Example
+`server_set_max_players(players, save)`
+
+### Parameters
+| Field | Type |
+| ----- | ---- |
+| players | `integer` |
+| save | `boolean` |
+
+### Returns
+- None
+
+### C Prototype
+`void server_set_max_players(u8 players, bool save);`
+
+[:arrow_up_small:](#)
+
+<br />
+
+## server_kick_player
+
+### Description
+Kicks a player with the given reason. Must be called from the server.
+
+### Lua Example
+`server_kick_player(np, reason)`
+
+### Parameters
+| Field | Type |
+| ----- | ---- |
+| np | [NetworkPlayer](structs.md#NetworkPlayer) |
+| reason | [enum KickReasonType](constants.md#enum-KickReasonType) |
+
+### Returns
+- None
+
+### C Prototype
+`void server_kick_player(struct NetworkPlayer *np, enum KickReasonType reason);`
+
+[:arrow_up_small:](#)
+
+<br />
+
+---
 # functions from smlua_anim_utils.h
 
 <br />

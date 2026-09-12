@@ -217,6 +217,7 @@ functions_files = [
     "src/pc/network/sync_object.h",
     "src/audio/load.h",
     "src/pc/djui/djui_gfx.h",
+    "src/pc/network/server.h",
 ]
 
 # For each file, expose only these functions
