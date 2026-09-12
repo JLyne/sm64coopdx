@@ -1,7 +1,7 @@
 #ifndef VERSION_H
 #define VERSION_H
 
-#define SM64COOPDX_VERSION "v1.6-dense-254"
+#define SM64COOPDX_VERSION "v1.6-rtgame"
 
 // internal version
 #define VERSION_TEXT "v"
