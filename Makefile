@@ -48,11 +48,11 @@ TEXTURE_FIX ?= 0
 # Enable level texture enhancements by default (Castle Grounds and Castle Courtyard recolorable texture hills)
 ENHANCE_LEVEL_TEXTURES ?= 1
 # Enable Discord Game SDK (used for Discord invites)
-DISCORD_SDK ?= 1
+DISCORD_SDK ?= 0
 # Enable CoopNet SDK (used for CoopNet server hosting)
-COOPNET ?= 1
+COOPNET ?= 0
 # Enable Updater (used for automatic updates)
-UPDATER ?= 1
+UPDATER ?= 0
 # Enable docker build workarounds
 DOCKERBUILD ?= 0
 # Sets your optimization level for building.
