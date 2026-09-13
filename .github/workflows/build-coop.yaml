@@ -3,9 +3,7 @@ name: Build coop
 on:
     workflow_dispatch:
     push:
-        branches: [ dev ]
-    pull_request:
-        branches: [ dev ]
+        branches: [ dev, rtgame ]
 
 jobs:
     build:
