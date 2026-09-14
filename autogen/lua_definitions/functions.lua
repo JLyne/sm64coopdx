@@ -10878,6 +10878,20 @@ function server_set_max_players(players, save)
     -- ...
 end
 
+--- @param slots integer
+--- @param save boolean
+--- Updates the server's reserved slot count. Must be called from the server.
+function server_set_reserved_slots(slots, save)
+    -- ...
+end
+
+--- @param password string
+--- @param save boolean
+--- Updates the server's reserved slot password. Must be called from the server.
+function server_set_reserved_slots_password(password, save)
+    -- ...
+end
+
 --- @param np NetworkPlayer
 --- @param reason KickReasonType
 --- Kicks a player with the given reason. Must be called from the server.

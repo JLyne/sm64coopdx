@@ -200,51 +200,54 @@ char         configPlayerName[MAX_CONFIG_STRING]  = "";
 unsigned int configPlayerModel                    = 0;
 struct PlayerPalette configPlayerPalette          = { { { 0x00, 0x00, 0xff }, { 0xff, 0x00, 0x00 }, { 0xff, 0xff, 0xff }, { 0x72, 0x1c, 0x0e }, { 0x73, 0x06, 0x00 }, { 0xfe, 0xc1, 0x79 }, { 0xff, 0x00, 0x00 }, { 0xff, 0x00, 0x00 } } };
 // coop settings
-unsigned int configAmountOfPlayers                = MAX_PLAYERS;
-bool         configBubbleDeath                    = true;
-unsigned int configHostPort                       = DEFAULT_PORT;
-unsigned int configHostSaveSlot                   = 1;
-char         configJoinIp[MAX_CONFIG_STRING]      = "sm64.rtgame.co.uk";
-unsigned int configJoinPort                       = DEFAULT_PORT;
-unsigned int configNetworkSystem                  = 0;
-unsigned int configPlayerInteraction              = 1;
-unsigned int configPlayerKnockbackStrength        = 25;
-unsigned int configStayInLevelAfterStar           = 0;
-bool         configNametags                       = true;
-bool         configModDevMode                     = false;
-unsigned int configBouncyLevelBounds              = 0;
-bool         configSkipIntro                      = 0;
-bool         configPauseAnywhere                  = false;
-bool         configMenuStaffRoll                  = false;
-unsigned int configMenuLevel                      = 0;
-unsigned int configMenuSound                      = 0;
-bool         configMenuRandom                     = false;
-bool         configMenuDemos                      = false;
-bool         configDisablePopups                  = false;
-char         configLanguage[MAX_CONFIG_STRING]    = "";
-bool         configForce4By3                      = false;
-bool         configDynosLocalPlayerModelOnly      = false;
-unsigned int configPvpType                        = PLAYER_PVP_CLASSIC;
+unsigned int configAmountOfPlayers                          = MAX_PLAYERS;
+unsigned int configReservedSlots                            = 0;
+char         configReservedSlotsPassword[MAX_CONFIG_STRING] = "";
+bool         configBubbleDeath                              = true;
+unsigned int configHostPort                                 = DEFAULT_PORT;
+unsigned int configHostSaveSlot                             = 1;
+char         configJoinIp[MAX_CONFIG_STRING]                = "sm64.rtgame.co.uk";
+unsigned int configJoinPort                                 = DEFAULT_PORT;
+char         configJoinPassword[MAX_CONFIG_STRING]          = "";
+unsigned int configNetworkSystem                            = 0;
+unsigned int configPlayerInteraction                        = 1;
+unsigned int configPlayerKnockbackStrength                  = 25;
+unsigned int configStayInLevelAfterStar                     = 0;
+bool         configNametags                                 = true;
+bool         configModDevMode                               = false;
+unsigned int configBouncyLevelBounds                        = 0;
+bool         configSkipIntro                                = 0;
+bool         configPauseAnywhere                            = false;
+bool         configMenuStaffRoll                            = false;
+unsigned int configMenuLevel                                = 0;
+unsigned int configMenuSound                                = 0;
+bool         configMenuRandom                               = false;
+bool         configMenuDemos                                = false;
+bool         configDisablePopups                            = false;
+char         configLanguage[MAX_CONFIG_STRING]              = "";
+bool         configForce4By3                                = false;
+bool         configDynosLocalPlayerModelOnly                = false;
+unsigned int configPvpType                                  = PLAYER_PVP_CLASSIC;
 // CoopNet settings
-char         configCoopNetIp[MAX_CONFIG_STRING]   = DEFAULT_COOPNET_IP;
-unsigned int configCoopNetPort                    = DEFAULT_COOPNET_PORT;
-char         configPassword[MAX_CONFIG_STRING]    = "";
-char         configDestId[MAX_CONFIG_STRING]      = "0";
+char         configCoopNetIp[MAX_CONFIG_STRING]             = DEFAULT_COOPNET_IP;
+unsigned int configCoopNetPort                              = DEFAULT_COOPNET_PORT;
+char         configPassword[MAX_CONFIG_STRING]              = "";
+char         configDestId[MAX_CONFIG_STRING]                = "0";
 // DJUI settings
-unsigned int configDjuiTheme                      = DJUI_THEME_DARK;
+unsigned int configDjuiTheme                                = DJUI_THEME_DARK;
 #ifdef HANDHELD
-bool         configDjuiThemeCenter                = false;
+bool         configDjuiThemeCenter                          = false;
 #else
-bool         configDjuiThemeCenter                = true;
+bool         configDjuiThemeCenter                          = true;
 #endif
-bool         configDjuiThemeGradients             = true;
-unsigned int configDjuiThemeFont                  = FONT_NORMAL;
-unsigned int configDjuiScale                      = 0;
+bool         configDjuiThemeGradients                       = true;
+unsigned int configDjuiThemeFont                            = FONT_NORMAL;
+unsigned int configDjuiScale                                = 0;
 // other
-unsigned int configRulesVersion                   = 0;
-bool         configHideSocketWarning              = false;
-bool         configCompressOnStartup              = false;
-bool         configSkipPackGeneration             = false;
+unsigned int configRulesVersion                             = 0;
+bool         configHideSocketWarning                        = false;
+bool         configCompressOnStartup                        = false;
+bool         configSkipPackGeneration                       = false;
 
 // secrets
 bool configExCoopTheme = false;
@@ -366,11 +369,14 @@ static const struct ConfigOption options[] = {
     {.name = "coop_player_palette_emblem",     .type = CONFIG_TYPE_COLOR,  .colorValue  = &configPlayerPalette.parts[EMBLEM]},
     // coop settings
     {.name = "amount_of_players",              .type = CONFIG_TYPE_UINT,   .uintValue   = &configAmountOfPlayers},
+    {.name = "reserved_slots",                 .type = CONFIG_TYPE_UINT,   .uintValue   = &configReservedSlots},
+    {.name = "reserved_slots_password",        .type = CONFIG_TYPE_STRING, .stringValue = (char*)&configReservedSlotsPassword, .maxStringLength = MAX_CONFIG_STRING},
     {.name = "bubble_death",                   .type = CONFIG_TYPE_BOOL,   .boolValue   = &configBubbleDeath},
     {.name = "coop_host_port",                 .type = CONFIG_TYPE_UINT,   .uintValue   = &configHostPort},
     {.name = "coop_host_save_slot",            .type = CONFIG_TYPE_UINT,   .uintValue   = &configHostSaveSlot},
     {.name = "coop_join_ip",                   .type = CONFIG_TYPE_STRING, .stringValue = (char*)&configJoinIp, .maxStringLength = MAX_CONFIG_STRING},
     {.name = "coop_join_port",                 .type = CONFIG_TYPE_UINT,   .uintValue   = &configJoinPort},
+    {.name = "coop_join_password",             .type = CONFIG_TYPE_STRING, .stringValue = (char*)&configJoinPassword, .maxStringLength = MAX_CONFIG_STRING},
     {.name = "coop_network_system",            .type = CONFIG_TYPE_UINT,   .uintValue   = &configNetworkSystem},
     {.name = "coop_player_interaction",        .type = CONFIG_TYPE_UINT,   .uintValue   = &configPlayerInteraction},
     {.name = "coop_player_knockback_strength", .type = CONFIG_TYPE_UINT,   .uintValue   = &configPlayerKnockbackStrength},

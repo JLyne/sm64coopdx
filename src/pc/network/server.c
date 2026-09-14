@@ -16,9 +16,46 @@ void server_set_max_players(u8 players, bool save) {
     }
 
     gServerSettings.maxPlayers = players;
+    gServerSettings.reservedSlots = MIN(gServerSettings.reservedSlots, gServerSettings.maxPlayers - 1);
 
     if (save) {
-        configAmountOfPlayers = players;
+        configAmountOfPlayers = gServerSettings.maxPlayers;
+        configReservedSlots = gServerSettings.reservedSlots;
+    }
+
+    network_send_server_settings();
+}
+
+void server_set_reserved_slots(u8 slots, bool save) {
+    if (gNetworkType != NT_SERVER) {
+        LOG_ERROR("Cannot kick a player from a client");
+        return;
+    }
+
+    if (slots > gServerSettings.maxPlayers - 1) {
+        LOG_ERROR("refusing to set invalid reserved slot count %d", slots);
+        return;
+    }
+
+    gServerSettings.reservedSlots = slots;
+
+    if (save) {
+        configReservedSlots = gServerSettings.reservedSlots;
+    }
+
+    network_send_server_settings();
+}
+
+void server_set_reserved_slots_password(const char *password, bool save) {
+    if (gNetworkType != NT_SERVER) {
+        LOG_ERROR("Cannot kick a player from a client");
+        return;
+    }
+
+    snprintf(gServerSettings.reservedSlotsPassword, MAX_CONFIG_STRING, "%s", password);
+
+    if (save) {
+        snprintf(configReservedSlotsPassword, MAX_CONFIG_STRING, "%s", password);
     }
 }
 

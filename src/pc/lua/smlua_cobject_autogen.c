@@ -2533,21 +2533,23 @@ static struct LuaObjectField sRomhackCameraSettingsFields[LUA_ROMHACK_CAMERA_SET
     { "zoomedOutHeight", LVT_U32, offsetof(struct RomhackCameraSettings, zoomedOutHeight), false, LOT_NONE },
 };
 
-#define LUA_SERVER_SETTINGS_FIELD_COUNT 13
+#define LUA_SERVER_SETTINGS_FIELD_COUNT 15
 static struct LuaObjectField sServerSettingsFields[LUA_SERVER_SETTINGS_FIELD_COUNT] = {
-    { "bouncyLevelBounds",           LVT_S32, offsetof(struct ServerSettings, bouncyLevelBounds),           false, LOT_NONE },
-    { "bubbleDeath",                 LVT_U8,  offsetof(struct ServerSettings, bubbleDeath),                 false, LOT_NONE },
-    { "enablePlayerList",            LVT_U8,  offsetof(struct ServerSettings, enablePlayerList),            false, LOT_NONE },
-    { "enablePlayersInLevelDisplay", LVT_U8,  offsetof(struct ServerSettings, enablePlayersInLevelDisplay), false, LOT_NONE },
-    { "headlessServer",              LVT_U8,  offsetof(struct ServerSettings, headlessServer),              false, LOT_NONE },
-    { "maxPlayers",                  LVT_U8,  offsetof(struct ServerSettings, maxPlayers),                  false, LOT_NONE },
-    { "nametags",                    LVT_U8,  offsetof(struct ServerSettings, nametags),                    false, LOT_NONE },
-    { "pauseAnywhere",               LVT_U8,  offsetof(struct ServerSettings, pauseAnywhere),               false, LOT_NONE },
-    { "playerInteractions",          LVT_S32, offsetof(struct ServerSettings, playerInteractions),          false, LOT_NONE },
-    { "playerKnockbackStrength",     LVT_U8,  offsetof(struct ServerSettings, playerKnockbackStrength),     false, LOT_NONE },
-    { "pvpType",                     LVT_S32, offsetof(struct ServerSettings, pvpType),                     false, LOT_NONE },
-    { "skipIntro",                   LVT_U8,  offsetof(struct ServerSettings, skipIntro),                   false, LOT_NONE },
-    { "stayInLevelAfterStar",        LVT_S32, offsetof(struct ServerSettings, stayInLevelAfterStar),        false, LOT_NONE },
+    { "bouncyLevelBounds",           LVT_S32,    offsetof(struct ServerSettings, bouncyLevelBounds),           false, LOT_NONE },
+    { "bubbleDeath",                 LVT_U8,     offsetof(struct ServerSettings, bubbleDeath),                 false, LOT_NONE },
+    { "enablePlayerList",            LVT_U8,     offsetof(struct ServerSettings, enablePlayerList),            false, LOT_NONE },
+    { "enablePlayersInLevelDisplay", LVT_U8,     offsetof(struct ServerSettings, enablePlayersInLevelDisplay), false, LOT_NONE },
+    { "headlessServer",              LVT_U8,     offsetof(struct ServerSettings, headlessServer),              false, LOT_NONE },
+    { "maxPlayers",                  LVT_U8,     offsetof(struct ServerSettings, maxPlayers),                  false, LOT_NONE },
+    { "nametags",                    LVT_U8,     offsetof(struct ServerSettings, nametags),                    false, LOT_NONE },
+    { "pauseAnywhere",               LVT_U8,     offsetof(struct ServerSettings, pauseAnywhere),               false, LOT_NONE },
+    { "playerInteractions",          LVT_S32,    offsetof(struct ServerSettings, playerInteractions),          false, LOT_NONE },
+    { "playerKnockbackStrength",     LVT_U8,     offsetof(struct ServerSettings, playerKnockbackStrength),     false, LOT_NONE },
+    { "pvpType",                     LVT_S32,    offsetof(struct ServerSettings, pvpType),                     false, LOT_NONE },
+    { "reservedSlots",               LVT_U8,     offsetof(struct ServerSettings, reservedSlots),               false, LOT_NONE },
+    { "reservedSlotsPassword",       LVT_STRING, offsetof(struct ServerSettings, reservedSlotsPassword),       false, LOT_NONE },
+    { "skipIntro",                   LVT_U8,     offsetof(struct ServerSettings, skipIntro),                   false, LOT_NONE },
+    { "stayInLevelAfterStar",        LVT_S32,    offsetof(struct ServerSettings, stayInLevelAfterStar),        false, LOT_NONE },
 };
 
 #define LUA_SPAWN_INFO_FIELD_COUNT 8
