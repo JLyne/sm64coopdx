@@ -2880,21 +2880,23 @@
 
 ## ServerSettings
 
-| Field | Type | Access |
-| ----- | ---- | ------ |
-| playerInteractions | [enum PlayerInteractions](constants.md#enum-PlayerInteractions) |  |
-| bouncyLevelBounds | [enum BouncyLevelBounds](constants.md#enum-BouncyLevelBounds) |  |
-| pvpType | [enum PvpType](constants.md#enum-PvpType) |  |
-| stayInLevelAfterStar | [enum StarExitType](constants.md#enum-StarExitType) |  |
-| playerKnockbackStrength | `integer` |  |
-| skipIntro | `integer` |  |
-| bubbleDeath | `integer` |  |
-| enablePlayersInLevelDisplay | `integer` |  |
-| enablePlayerList | `integer` |  |
-| headlessServer | `integer` |  |
-| nametags | `integer` |  |
-| maxPlayers | `integer` |  |
-| pauseAnywhere | `integer` |  |
+| Field                       | Type                                                            | Access |
+|-----------------------------|-----------------------------------------------------------------| ------ |
+| playerInteractions          | [enum PlayerInteractions](constants.md#enum-PlayerInteractions) |  |
+| bouncyLevelBounds           | [enum BouncyLevelBounds](constants.md#enum-BouncyLevelBounds)   |  |
+| pvpType                     | [enum PvpType](constants.md#enum-PvpType)                       |  |
+| stayInLevelAfterStar        | [enum StarExitType](constants.md#enum-StarExitType)             |  |
+| playerKnockbackStrength     | `integer`                                                       |  |
+| skipIntro                   | `integer`                                                       |  |
+| bubbleDeath                 | `integer`                                                       |  |
+| enablePlayersInLevelDisplay | `integer`                                                       |  |
+| enablePlayerList            | `integer`                                                       |  |
+| headlessServer              | `integer`                                                       |  |
+| nametags                    | `integer`                                                       |  |
+| maxPlayers                  | `integer`                                                       |  |
+| reservedSlots               | `integer`                                                       |  |
+| reservedSlotsPassword       | `string`                                                        |  |
+| pauseAnywhere               | `integer`                                                       |  |
 
 [:arrow_up_small:](#)
 

@@ -2196,6 +2196,8 @@
 --- @field public headlessServer integer
 --- @field public nametags integer
 --- @field public maxPlayers integer
+--- @field public reservedSlots integer
+--- @field public reservedSlotsPassword string
 --- @field public pauseAnywhere integer
 
 --- @class SpawnInfo
