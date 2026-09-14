@@ -40,6 +40,8 @@
 #include "engine/lighting_engine.h"
 #include "audio/load.h"
 
+#include <string.h>
+
 #ifdef DISCORD_SDK
 #include "pc/discord/discord.h"
 #endif
@@ -89,6 +91,8 @@ struct ServerSettings gServerSettings = {
     .headlessServer = FALSE,
     .nametags = TRUE,
     .maxPlayers = MAX_PLAYERS,
+    .reservedSlots = 0,
+    .reservedSlotsPassword = "",
     .pauseAnywhere = FALSE,
     .pvpType = PLAYER_PVP_CLASSIC,
 };
@@ -137,6 +141,8 @@ bool network_init(enum NetworkType inNetworkType, bool reconnecting) {
     gServerSettings.enablePlayerList = TRUE;
     gServerSettings.nametags = configNametags;
     gServerSettings.maxPlayers = configAmountOfPlayers;
+    gServerSettings.reservedSlots = MIN(configReservedSlots, configAmountOfPlayers - 1);
+    snprintf(gServerSettings.reservedSlotsPassword, MAX_CONFIG_STRING, "%s", configReservedSlotsPassword);
     gServerSettings.pauseAnywhere = configPauseAnywhere;
     gServerSettings.pvpType = configPvpType;
     gServerSettings.headlessServer = gCLIOpts.headless && (inNetworkType == NT_SERVER);

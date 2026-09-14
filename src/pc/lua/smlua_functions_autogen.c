@@ -29412,6 +29412,44 @@ int smlua_func_server_set_max_players(lua_State* L) {
     return 0;
 }
 
+int smlua_func_server_set_reserved_slots(lua_State* L) {
+    if (L == NULL) { return 0; }
+
+    int top = lua_gettop(L);
+    if (top != 2) {
+        LOG_LUA_LINE("Improper param count for '%s': Expected %u, Received %u", "server_set_reserved_slots", 2, top);
+        return 0;
+    }
+
+    u8 slots = smlua_to_integer(L, 1);
+    if (!gSmLuaConvertSuccess) { LOG_LUA("Failed to convert parameter %u for function '%s'", 1, "server_set_reserved_slots"); return 0; }
+    bool save = smlua_to_boolean(L, 2);
+    if (!gSmLuaConvertSuccess) { LOG_LUA("Failed to convert parameter %u for function '%s'", 2, "server_set_reserved_slots"); return 0; }
+
+    server_set_reserved_slots(slots, save);
+
+    return 0;
+}
+
+int smlua_func_server_set_reserved_slots_password(lua_State* L) {
+    if (L == NULL) { return 0; }
+
+    int top = lua_gettop(L);
+    if (top != 2) {
+        LOG_LUA_LINE("Improper param count for '%s': Expected %u, Received %u", "server_set_reserved_slots_password", 2, top);
+        return 0;
+    }
+
+    const char* password = smlua_to_string(L, 1);
+    if (!gSmLuaConvertSuccess) { LOG_LUA("Failed to convert parameter %u for function '%s'", 1, "server_set_reserved_slots_password"); return 0; }
+    bool save = smlua_to_boolean(L, 2);
+    if (!gSmLuaConvertSuccess) { LOG_LUA("Failed to convert parameter %u for function '%s'", 2, "server_set_reserved_slots_password"); return 0; }
+
+    server_set_reserved_slots_password(password, save);
+
+    return 0;
+}
+
 int smlua_func_server_kick_player(lua_State* L) {
     if (L == NULL) { return 0; }
 
@@ -38175,6 +38213,8 @@ void smlua_bind_functions_autogen(void) {
 
     // server.h
     smlua_bind_function(L, "server_set_max_players", smlua_func_server_set_max_players);
+    smlua_bind_function(L, "server_set_reserved_slots", smlua_func_server_set_reserved_slots);
+    smlua_bind_function(L, "server_set_reserved_slots_password", smlua_func_server_set_reserved_slots_password);
     smlua_bind_function(L, "server_kick_player", smlua_func_server_kick_player);
 
     // smlua_anim_utils.h

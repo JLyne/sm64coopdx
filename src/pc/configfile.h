@@ -139,6 +139,8 @@ extern unsigned int configPlayerModel;
 extern struct PlayerPalette configPlayerPalette;
 // coop settings
 extern unsigned int configAmountOfPlayers;
+extern unsigned int configReservedSlots;
+extern char         configReservedSlotsPassword[MAX_CONFIG_STRING];
 extern bool         configBubbleDeath;
 extern unsigned int configHostPort;
 extern unsigned int configHostSaveSlot;

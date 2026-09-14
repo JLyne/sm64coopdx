@@ -1843,6 +1843,8 @@
 
 - server.h
    - [server_set_max_players](functions-6.md#server_set_max_players)
+   - [server_set_reserved_slots](functions-6.md#server_set_reserved_slots)
+   - [server_set_reserved_slots_password](functions-6.md#server_set_reserved_slots_password)
    - [server_kick_player](functions-6.md#server_kick_player)
 
 <br />

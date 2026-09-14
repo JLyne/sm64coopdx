@@ -2894,6 +2894,8 @@
 | headlessServer | `integer` |  |
 | nametags | `integer` |  |
 | maxPlayers | `integer` |  |
+| reservedSlots | `integer` |  |
+| reservedSlotsPassword | `string` |  |
 | pauseAnywhere | `integer` |  |
 
 [:arrow_up_small:](#)

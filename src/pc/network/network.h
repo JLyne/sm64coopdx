@@ -11,6 +11,7 @@
 #include "sync_object.h"
 #include "pc/utils/string_linked_list.h"
 #include "../cliopts.h"
+#include "pc/configfile.h"
 
 #define SET_BIT(val, num) ((((u8)(val)) & 0x01) << (num));
 #define GET_BIT(val, num) (((val) >> (num)) & 0x01)
@@ -93,6 +94,8 @@ struct ServerSettings {
     u8 headlessServer;
     u8 nametags;
     u8 maxPlayers;
+    u8 reservedSlots;
+    char reservedSlotsPassword[MAX_CONFIG_STRING];
     u8 pauseAnywhere;
 };
 

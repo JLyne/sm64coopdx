@@ -19,7 +19,8 @@
 #include "pc/djui/djui_panel_menu.h"
 #include "pc/djui/djui_panel_join_message.h"
 #include "pc/utils/string_builder.h"
-//#define DISABLE_MODULE_LOG 1
+// #define DISABLE_MODULE_LOG 1
+#include "pc/configfile.h"
 #include "pc/debuglog.h"
 #include "pc/utils/misc.h"
 #include "pc/mods/mods.h"
@@ -27,12 +28,15 @@
 #include "pc/configfile.h"
 #include "pc/lua/utils/smlua_misc_utils.h"
 
+#include <string.h>
+
 extern u8* gOverrideEeprom;
 static u8 eeprom[512] = { 0 };
 
 static u8   sJoinRequestPlayerModel;
 static struct PlayerPalette sJoinRequestPlayerPalette;
 static char sJoinRequestPlayerName[MAX_CONFIG_STRING];
+static char sJoinRequestPassword[MAX_CONFIG_STRING];
 static char sJoinRequestDiscordId[64];
 bool gReceivedPlayerList = false;
 
@@ -51,6 +55,7 @@ void network_send_join_request(void) {
     packet_write(&p, &configPlayerModel,   sizeof(u8));
     packet_write(&p, &configPlayerPalette, sizeof(struct PlayerPalette));
     packet_write(&p, &configPlayerName,    sizeof(u8) * MAX_CONFIG_STRING);
+    packet_write(&p, &configJoinPassword,  sizeof(u8) * MAX_CONFIG_STRING);
 
     network_send_to((gNetworkPlayerServer != NULL) ? gNetworkPlayerServer->localIndex : 0, &p);
     LOG_INFO("sending join request");
@@ -66,10 +71,12 @@ void network_receive_join_request(struct Packet* p) {
         packet_read(p, &sJoinRequestPlayerModel,   sizeof(u8));
         packet_read(p, &sJoinRequestPlayerPalette, sizeof(struct PlayerPalette));
         packet_read(p, &sJoinRequestPlayerName,    sizeof(u8) * MAX_CONFIG_STRING);
+        packet_read(p, &sJoinRequestPassword,      sizeof(u8) * MAX_CONFIG_STRING);
     } else {
         sJoinRequestPlayerModel = 0;
         sJoinRequestPlayerPalette = DEFAULT_MARIO_PALETTE;
         snprintf(sJoinRequestPlayerName, MAX_CONFIG_STRING, "%s", "Player");
+        sJoinRequestPassword[0] = 0;
     }
 
     network_send_join(p);
@@ -88,13 +95,30 @@ void network_send_join(struct Packet* joinRequestPacket) {
     if (globalIndex == UNKNOWN_LOCAL_INDEX) {
         for (u32 i = 1; i < MAX_PLAYERS; i++) {
             if (!gNetworkPlayers[i].connected) {
-                globalIndex = i;
-                break;
+                if (globalIndex == UNKNOWN_LOCAL_INDEX) {
+                    globalIndex = i;
+                }
             } else {
                 connectedCount++;
             }
         }
-        if (globalIndex == UNKNOWN_LOCAL_INDEX || connectedCount >= gServerSettings.maxPlayers) {
+        if (globalIndex == UNKNOWN_LOCAL_INDEX) {
+            network_send_kick(0, EKT_FULL_PARTY);
+            return;
+        }
+
+        // Check reserved slots
+        bool serverFull = connectedCount >= (gServerSettings.maxPlayers - gServerSettings.reservedSlots);
+
+        if (gServerSettings.reservedSlots > 0 && strlen(gServerSettings.reservedSlotsPassword) > 0) {
+            if (!strcmp(gServerSettings.reservedSlotsPassword, sJoinRequestPassword)) {
+                LOG_INFO("Player can use reserved slots");
+                serverFull = connectedCount >= gServerSettings.maxPlayers;
+            }
+        }
+
+        if (serverFull) {
+            LOG_INFO("Server full (%d players, %d total slots, %d reserved slots)", connectedCount, gServerSettings.maxPlayers, gServerSettings.reservedSlots);
             network_send_kick(0, EKT_FULL_PARTY);
             return;
         }
@@ -140,6 +164,7 @@ void network_send_join(struct Packet* joinRequestPacket) {
     packet_write(&p, &gServerSettings.headlessServer, sizeof(u8));
     packet_write(&p, &gServerSettings.nametags, sizeof(u8));
     packet_write(&p, &gServerSettings.maxPlayers, sizeof(u8));
+    packet_write(&p, &gServerSettings.reservedSlots, sizeof(u8));
     packet_write(&p, &gServerSettings.pauseAnywhere, sizeof(u8));
     packet_write(&p, &gServerSettings.pvpType, sizeof(u8));
     packet_write(&p, eeprom, sizeof(u8) * 512);
@@ -193,20 +218,27 @@ void network_receive_join(struct Packet* p) {
     packet_read(p, &gServerSettings.headlessServer, sizeof(u8));
     packet_read(p, &gServerSettings.nametags, sizeof(u8));
     packet_read(p, &gServerSettings.maxPlayers, sizeof(u8));
+    packet_read(p, &gServerSettings.reservedSlots, sizeof(u8));
     packet_read(p, &gServerSettings.pauseAnywhere, sizeof(u8));
     packet_read(p, &gServerSettings.pvpType, sizeof(u8));
     packet_read(p, eeprom, sizeof(u8) * 512);
+
+    // Password isn't sent to client so any value already stored here is incorrect
+    gServerSettings.reservedSlotsPassword[0] = 0;
 
     if (
         p->error
         || myGlobalIndex >= MAX_PLAYERS
         || gServerSettings.maxPlayers < 1
         || gServerSettings.maxPlayers > MAX_PLAYERS
+        || gServerSettings.maxPlayers < gServerSettings.reservedSlots
+        || gServerSettings.reservedSlots > MAX_PLAYERS
     ) {
         LOG_ERROR(
-            "invalid join packet: global=%u maxPlayers=%u error=%u",
+            "invalid join packet: global=%u maxPlayers=%u reservedSlots=%u error=%u",
             myGlobalIndex,
             gServerSettings.maxPlayers,
+            gServerSettings.reservedSlots,
             p->error
         );
         network_shutdown(true, false, false, false);

@@ -14,6 +14,7 @@
 #include "macros.h"
 
 static struct DjuiInputbox* sInputboxIp = NULL;
+static struct DjuiInputbox* sInputboxPassword = NULL;
 
 static bool djui_panel_join_direct_ip_parse_numbers(char** msg) {
     int num = 0;
@@ -190,6 +191,7 @@ void djui_panel_join_direct_do_join(struct DjuiBase* caller) {
         djui_inputbox_select_all(sInputboxIp);
         return;
     }
+    snprintf(configJoinPassword, MAX_CONFIG_STRING, "%s", sInputboxPassword->buffer);
     network_reset_reconnect_and_rehost();
     djui_panel_join_direct_ip_text_set_new();
     network_set_system(NS_SOCKET);
@@ -217,6 +219,20 @@ void djui_panel_join_direct_create(struct DjuiBase* caller) {
         djui_interactable_hook_value_change(&inputbox1->base, djui_panel_join_direct_ip_text_change);
         sInputboxIp = inputbox1;
         djui_panel_join_direct_ip_text_set(inputbox1);
+
+        struct DjuiText* text2 = djui_text_create(body, DLANG(JOIN, JOIN_PASSWORD));
+        djui_base_set_size_type(&text2->base, DJUI_SVT_RELATIVE, DJUI_SVT_ABSOLUTE);
+        djui_base_set_size(&text2->base, 1.0f, 100);
+        djui_base_compute_tree(&text2->base);
+        djui_base_set_size(&text2->base, 1.0f, directTextHeight);
+        djui_base_set_color(&text2->base, 220, 220, 220, 255);
+
+        struct DjuiInputbox* inputbox2 = djui_inputbox_create(body, 256);
+        djui_base_set_size_type(&inputbox2->base, DJUI_SVT_RELATIVE, DJUI_SVT_ABSOLUTE);
+        djui_base_set_size(&inputbox2->base, 1.0f, 32.0f);
+        sInputboxPassword = inputbox2;
+        inputbox2->passwordChar[0] = '#';
+        djui_inputbox_set_text(inputbox2, configJoinPassword);
 
         struct DjuiRect* rect2 = djui_rect_container_create(body, 64);
         {

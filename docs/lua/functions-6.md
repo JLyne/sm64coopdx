@@ -6192,6 +6192,54 @@ Updates the servers's max player count. Must be called from the server.
 
 <br />
 
+## server_set_reserved_slots
+
+### Description
+Updates the server's reserved slot count. Must be called from the server.
+
+### Lua Example
+`server_set_reserved_slots(slots, save)`
+
+### Parameters
+| Field | Type |
+| ----- | ---- |
+| slots | `integer` |
+| save | `boolean` |
+
+### Returns
+- None
+
+### C Prototype
+`void server_set_reserved_slots(u8 slots, bool save);`
+
+[:arrow_up_small:](#)
+
+<br />
+
+## server_set_reserved_slots_password
+
+### Description
+Updates the server's reserved slot password. Must be called from the server.
+
+### Lua Example
+`server_set_reserved_slots_password(password, save)`
+
+### Parameters
+| Field | Type |
+| ----- | ---- |
+| password | `string` |
+| save | `boolean` |
+
+### Returns
+- None
+
+### C Prototype
+`void server_set_reserved_slots_password(const char *password, bool save);`
+
+[:arrow_up_small:](#)
+
+<br />
+
 ## server_kick_player
 
 ### Description
