@@ -5,9 +5,16 @@
 #include "djui_panel_options.h"
 #include "djui_panel_menu.h"
 #include "djui_panel_confirm.h"
+#include "djui_panel_join_message.h"
+#include "pc/configfile.h"
+#include "pc/network/network.h"
+#include "pc/network/socket/socket.h"
 #include "pc/controller/controller_sdl.h"
 #include "pc/pc_main.h"
 #include "pc/update_checker.h"
+
+#include <stdio.h>
+#include <string.h>
 
 extern ALIGNED8 u8 texture_coopdx_logo[];
 
@@ -22,6 +29,14 @@ static void djui_panel_main_quit(struct DjuiBase* caller) {
                               DLANG(MAIN, QUIT_TITLE),
                               DLANG(MAIN, QUIT_CONFIRM),
                               djui_panel_main_quit_yes);
+}
+
+void djui_panel_main_do_join(struct DjuiBase* caller) {
+    snprintf(gGetHostName, MAX_CONFIG_STRING, "%s", configJoinIp);
+    network_reset_reconnect_and_rehost();
+    network_set_system(NS_SOCKET);
+    network_init(NT_CLIENT, false);
+    djui_panel_join_message_create(caller);
 }
 
 void djui_panel_main_create(struct DjuiBase* caller) {
@@ -41,16 +56,24 @@ void djui_panel_main_create(struct DjuiBase* caller) {
                 djui_base_set_location(&logo->base, 0, -30);
             }
 
-            struct DjuiButton* button1 = djui_button_create(body, DLANG(MAIN, HOST), DJUI_BUTTON_STYLE_NORMAL, djui_panel_host_create);
-            if (!configExCoopTheme) { djui_base_set_location(&button1->base, 0, -30); }
-            djui_cursor_input_controlled_center(&button1->base);
+            bool quickJoin = strlen(configJoinIp) > 0;
+            struct DjuiButton* button1 = NULL;
 
-            struct DjuiButton* button2 = djui_button_create(body, DLANG(MAIN, JOIN), DJUI_BUTTON_STYLE_NORMAL, djui_panel_join_create);
+            if (quickJoin) {
+                button1 = djui_button_create(body, DLANG(MAIN, QUICK_JOIN), DJUI_BUTTON_STYLE_NORMAL, djui_panel_main_do_join);
+                if (!configExCoopTheme) { djui_base_set_location(&button1->base, 0, -30); }
+            }
+
+            struct DjuiButton* button2 = djui_button_create(body, DLANG(MAIN, HOST), DJUI_BUTTON_STYLE_NORMAL, djui_panel_host_create);
             if (!configExCoopTheme) { djui_base_set_location(&button2->base, 0, -30); }
-            struct DjuiButton* button3 = djui_button_create(body, DLANG(MAIN, OPTIONS), DJUI_BUTTON_STYLE_NORMAL, djui_panel_options_create);
+            struct DjuiButton* button3 = djui_button_create(body, DLANG(MAIN, JOIN), DJUI_BUTTON_STYLE_NORMAL, djui_panel_join_create);
             if (!configExCoopTheme) { djui_base_set_location(&button3->base, 0, -30); }
-            struct DjuiButton* button4 = djui_button_create(body, DLANG(MAIN, QUIT), DJUI_BUTTON_STYLE_BACK, djui_panel_main_quit);
+            struct DjuiButton* button4 = djui_button_create(body, DLANG(MAIN, OPTIONS), DJUI_BUTTON_STYLE_NORMAL, djui_panel_options_create);
             if (!configExCoopTheme) { djui_base_set_location(&button4->base, 0, -30); }
+            struct DjuiButton* button5 = djui_button_create(body, DLANG(MAIN, QUIT), DJUI_BUTTON_STYLE_BACK, djui_panel_main_quit);
+            if (!configExCoopTheme) { djui_base_set_location(&button5->base, 0, -30); }
+
+            djui_cursor_input_controlled_center(quickJoin ? &button1->base : &button2->base);
         }
 
         // these two cannot co-exist for some reason
