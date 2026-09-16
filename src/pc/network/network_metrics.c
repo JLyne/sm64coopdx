@@ -97,6 +97,7 @@ const char* network_metrics_packet_name(enum PacketType packetType) {
         case PACKET_LUA_CUSTOM_BYTESTRING: return "LUA_CUSTOM_BYTESTRING";
         case PACKET_COMMAND: return "COMMAND";
         case PACKET_MODERATOR: return "MODERATOR";
+        case PACKET_SERVER_SETTINGS: return "PACKET_SERVER_SETTINGS";
         case PACKET_CUSTOM: return "CUSTOM";
         default: return "UNKNOWN";
     }
