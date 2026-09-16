@@ -503,6 +503,7 @@ void djui_panel_player_create(struct DjuiBase* caller) {
             }
             djui_interactable_hook_value_change(&inputbox1->base, djui_panel_player_name_text_change);
             djui_interactable_hook_focus(&inputbox1->base, djui_inputbox_on_focus_begin, NULL, djui_panel_player_name_on_focus_end);
+            djui_checkbox_create(body, DLANG(PLAYER, DRIFT_KING), &configDriftKing, NULL);
         }
 
         char* characterChoices[CT_MAX] = { 0 };
