@@ -199,6 +199,7 @@ bool         configCtxProfiler                    = false;
 char         configPlayerName[MAX_CONFIG_STRING]  = "";
 unsigned int configPlayerModel                    = 0;
 struct PlayerPalette configPlayerPalette          = { { { 0x00, 0x00, 0xff }, { 0xff, 0x00, 0x00 }, { 0xff, 0xff, 0xff }, { 0x72, 0x1c, 0x0e }, { 0x73, 0x06, 0x00 }, { 0xfe, 0xc1, 0x79 }, { 0xff, 0x00, 0x00 }, { 0xff, 0x00, 0x00 } } };
+bool         configDriftKing                      = false;
 // coop settings
 unsigned int configAmountOfPlayers                          = MAX_PLAYERS;
 unsigned int configReservedSlots                            = 0;
@@ -367,6 +368,7 @@ static const struct ConfigOption options[] = {
     {.name = "coop_player_palette_skin",       .type = CONFIG_TYPE_COLOR,  .colorValue  = &configPlayerPalette.parts[SKIN]},
     {.name = "coop_player_palette_cap",        .type = CONFIG_TYPE_COLOR,  .colorValue  = &configPlayerPalette.parts[CAP]},
     {.name = "coop_player_palette_emblem",     .type = CONFIG_TYPE_COLOR,  .colorValue  = &configPlayerPalette.parts[EMBLEM]},
+    {.name = "coop_player_drift_king",         .type = CONFIG_TYPE_BOOL,   .boolValue   = &configDriftKing},
     // coop settings
     {.name = "amount_of_players",              .type = CONFIG_TYPE_UINT,   .uintValue   = &configAmountOfPlayers},
     {.name = "reserved_slots",                 .type = CONFIG_TYPE_UINT,   .uintValue   = &configReservedSlots},
