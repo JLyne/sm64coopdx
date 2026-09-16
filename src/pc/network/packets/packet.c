@@ -124,6 +124,7 @@ void packet_process(struct Packet* p) {
         case PACKET_CHANGE_WATER_LEVEL:      network_receive_change_water_level(p);      break;
 
         case PACKET_PLAYER_SETTINGS:         network_receive_player_settings(p);         break;
+        case PACKET_SERVER_SETTINGS:         network_receive_server_settings(p);         break;
 
         case PACKET_MOD_LIST_REQUEST:        network_receive_mod_list_request(p);        break;
         case PACKET_MOD_LIST:                network_receive_mod_list(p);                break;

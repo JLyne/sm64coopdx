@@ -86,6 +86,8 @@ enum PacketType {
     PACKET_COMMAND,
     PACKET_MODERATOR,
 
+    PACKET_SERVER_SETTINGS,
+
     ///
     PACKET_CUSTOM = 255,
 };
@@ -356,6 +358,10 @@ void network_receive_debug_sync(struct Packet* p);
 // packet_player_settings.c
 void network_send_player_settings(void);
 void network_receive_player_settings(struct Packet* p);
+
+// packet_server_settings.c
+void network_send_server_settings(void);
+void network_receive_server_settings(struct Packet* p);
 
 // packet_mod_list.c
 void network_send_mod_list_request(void);
