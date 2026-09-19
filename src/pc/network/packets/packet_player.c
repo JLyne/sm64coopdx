@@ -252,7 +252,7 @@ void network_receive_player(struct Packet* p) {
     if (gNetworkType == NT_SERVER && *((u32*)(p->buffer + p->cursor + offsetof(struct PacketPlayerData, action))) == ACT_DEBUG_FREE_MOVE) {
 #ifdef DEVELOPMENT
         if (m->action != ACT_DEBUG_FREE_MOVE) {
-            construct_player_popup(np, DLANG(NOTIF, DEBUG_FLY), NULL);
+            construct_player_popup(np, DLANG(NOTIF, DEBUG_FLY), NULL, 2);
         }
 #else
         network_send_kick(np->localIndex, EKT_KICKED);

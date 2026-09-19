@@ -368,7 +368,7 @@ u8 network_player_connected(enum NetworkPlayerType type, u8 globalIndex, u8 mode
 
     // display connected popup
     if (gReceivedPlayerList && type != NPT_SERVER && (gNetworkType != NT_SERVER || type != NPT_LOCAL)) {
-        construct_player_popup(np, DLANG(NOTIF, CONNECTED), NULL);
+        construct_player_popup(np, DLANG(NOTIF, CONNECTED), NULL, 1);
     }
     LOG_INFO("player connected, local %d, global %d", localIndex, np->globalIndex);
 
@@ -426,7 +426,7 @@ u8 network_player_disconnected(u8 globalIndex) {
         LOG_INFO("player disconnected, local %d, global %d", i, globalIndex);
 
         // display popup
-        construct_player_popup(np, DLANG(NOTIF, DISCONNECTED), NULL);
+        construct_player_popup(np, DLANG(NOTIF, DISCONNECTED), NULL, 1);
 
         packet_ordered_clear(globalIndex);
 
@@ -448,7 +448,7 @@ u8 network_player_disconnected(u8 globalIndex) {
     return UNKNOWN_GLOBAL_INDEX;
 }
 
-void construct_player_popup(struct NetworkPlayer* np, char* msg, const char* level) {
+void construct_player_popup(struct NetworkPlayer* np, char* msg, const char* level, const int lines) {
     char built[256] = { 0 };
     snprintf(built, 256, "\\#\\");
 
@@ -459,7 +459,7 @@ void construct_player_popup(struct NetworkPlayer* np, char* msg, const char* lev
     } else {
         djui_language_replace(msg, &built[3], 256 - 3, '@', player);
     }
-    djui_popup_create(built, 1);
+    djui_popup_create(built, lines);
 }
 
 void network_player_update_course_level(struct NetworkPlayer* np, s16 courseNum, s16 actNum, s16 levelNum, s16 areaIndex) {
@@ -475,11 +475,11 @@ void network_player_update_course_level(struct NetworkPlayer* np, s16 courseNum,
         bool matchingLocal = (np->currCourseNum == gNetworkPlayerLocal->currCourseNum) && (np->currActNum == gNetworkPlayerLocal->currActNum);
 
         if (matchingLocal && gNetworkPlayerLocal->currCourseNum != 0) {
-            construct_player_popup(np, DLANG(NOTIF, LEFT_THIS_LEVEL), NULL);
+            construct_player_popup(np, DLANG(NOTIF, LEFT_THIS_LEVEL), NULL, 1);
         } else if (gNetworkPlayerLocal->currCourseNum == courseNum && gNetworkPlayerLocal->currCourseNum != 0) {
-            construct_player_popup(np, DLANG(NOTIF, ENTERED_THIS_LEVEL), NULL);
+            construct_player_popup(np, DLANG(NOTIF, ENTERED_THIS_LEVEL), NULL, 1);
         } else {
-            construct_player_popup(np, DLANG(NOTIF, ENTERED), get_level_name(courseNum, levelNum, areaIndex));
+            construct_player_popup(np, DLANG(NOTIF, ENTERED), get_level_name(courseNum, levelNum, areaIndex), 2);
         }
     }
 
@@ -536,6 +536,6 @@ void network_player_shutdown(bool popup) {
         gNetworkSystem->clear_id(i);
     }
 
-    if (popup) { djui_popup_create(DLANG(NOTIF, SERVER_CLOSED), 1); }
+    if (popup) { djui_popup_create(DLANG(NOTIF, SERVER_CLOSED), 2); }
     LOG_INFO("cleared all network players");
 }

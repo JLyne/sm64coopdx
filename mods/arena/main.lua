@@ -347,7 +347,7 @@ function on_arena_player_death(victimGlobalId, attackerGlobalId)
     if npAttacker == nil or npVictim == npAttacker then
         -- create popup
         local victimColor = network_get_player_text_color_string(npVictim.localIndex)
-        djui_popup_create(victimColor .. npVictim.name .. normalColor .. " died!", 2)
+        djui_popup_create(victimColor .. npVictim.name .. normalColor .. " died!", 1)
 
         -- adjust deaths/kills
         if network_is_server() and gGlobalSyncTable.gameState == GAME_STATE_ACTIVE then
@@ -360,7 +360,7 @@ function on_arena_player_death(victimGlobalId, attackerGlobalId)
         -- create popup
         local victimColor = network_get_player_text_color_string(npVictim.localIndex)
         local attackerColor = network_get_player_text_color_string(npAttacker.localIndex)
-        djui_popup_create(attackerColor .. npAttacker.name .. normalColor .. " killed " .. victimColor .. npVictim.name .. normalColor .. "!", 2)
+        djui_popup_create(attackerColor .. npAttacker.name .. normalColor .. " killed " .. victimColor .. npVictim.name .. normalColor .. "!", 1)
 
         -- adjust deaths/kills
         if network_is_server() and gGlobalSyncTable.gameState == GAME_STATE_ACTIVE then
