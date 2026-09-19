@@ -398,7 +398,7 @@ static bool command_host(UNUSED const char *message) {
 }
 
 static bool command_rehost(UNUSED const char *message) {
-    network_rehost_begin();
+    network_mod_dev_mode_reload();
     return true;
 }
 
