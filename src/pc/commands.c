@@ -5,6 +5,9 @@
 #include "pc/djui/djui_chat_message.h"
 #include "pc/djui/djui_console.h"
 #include "commands.h"
+
+#include "cliopts.h"
+#include "configfile.h"
 #include "pc/network/ban_list.h"
 #include "pc/network/moderator_list.h"
 #include "pc/debuglog.h"
@@ -12,6 +15,9 @@
 #include "pc/mods/mods_utils.h"
 #include "pc/pc_main.h"
 #include "level_table.h"
+#include "mods/mods.h"
+
+#include <string.h>
 #ifdef DEVELOPMENT
 #include "pc/dev/chat.h"
 #endif
@@ -28,6 +34,8 @@ static bool command_clear(UNUSED const char *message);
 static bool command_quit(UNUSED const char *message);
 static bool command_host(UNUSED const char *message);
 static bool command_rehost(UNUSED const char *message);
+static bool command_enable_mod(const char *message);
+static bool command_disable_mod(const char *message);
 static bool command_disconnect(UNUSED const char *message);
 
 static struct Command sCommands[] = {
@@ -112,6 +120,20 @@ static struct Command sCommands[] = {
         .command = "stop-hosting",
         .description = "/stop-hosting - Stop hosting a currently active game",
         .action = command_disconnect,
+        .active = false,
+        .isChatCommand = false
+    },
+    {
+        .command = "enable-mod",
+        .description = "/enable-mod - Set a mod as enabled",
+        .action = command_enable_mod,
+        .active = false,
+        .isChatCommand = false
+    },
+    {
+        .command = "disable-mod",
+        .description = "/disable-mod - Set a mod as disabled",
+        .action = command_disable_mod,
         .active = false,
         .isChatCommand = false
     },
@@ -380,6 +402,40 @@ static bool command_rehost(UNUSED const char *message) {
     return true;
 }
 
+static bool command_enable_mod(const char *message) {
+    if (gNetworkType != NT_SERVER) {
+        command_message_create(DLANG(CHAT, SERVER_ONLY), CONSOLE_MESSAGE_ERROR);
+        return true;
+    }
+
+    if (!mods_enable(message)) {
+        command_message_create(DLANG(CHAT, MOD_NOT_FOUND), CONSOLE_MESSAGE_ERROR);
+    } else {
+        command_message_create(DLANG(CHAT, MOD_ENABLED), CONSOLE_MESSAGE_ERROR);
+    }
+
+    configfile_save(configfile_name());
+
+    return true;
+}
+
+static bool command_disable_mod(const char *message) {
+    if (gNetworkType != NT_SERVER) {
+        command_message_create(DLANG(CHAT, SERVER_ONLY), CONSOLE_MESSAGE_ERROR);
+        return true;
+    }
+
+    if (!mods_disable(message)) {
+        command_message_create(DLANG(CHAT, MOD_NOT_FOUND), CONSOLE_MESSAGE_ERROR);
+    } else {
+        command_message_create(DLANG(CHAT, MOD_DISABLED), CONSOLE_MESSAGE_ERROR);
+    }
+
+    configfile_save(configfile_name());
+
+    return true;
+}
+
 static bool command_disconnect(UNUSED const char *message) {
     network_reset_reconnect_and_rehost();
     network_shutdown(true, false, false, false);
@@ -439,6 +495,8 @@ void run_command(char *command, bool onConsole) {
     set_command_active("host", gDjuiInMainMenu);
     set_command_active("rehost", gNetworkType == NT_SERVER && !gDjuiInMainMenu);
     set_command_active("stop-hosting", gNetworkType == NT_SERVER && !gDjuiInMainMenu);
+    set_command_active("enable-mod", gNetworkType == NT_SERVER && !gDjuiInMainMenu);
+    set_command_active("disable-mod", gNetworkType == NT_SERVER && !gDjuiInMainMenu);
     set_command_active("disconnect", gNetworkType == NT_CLIENT && !gDjuiInMainMenu);
 
     // directly check help command

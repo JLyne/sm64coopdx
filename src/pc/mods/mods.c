@@ -292,16 +292,32 @@ void mods_refresh_local(void) {
     if (gGameInited) { mods_local_restore_enabled(); }
 }
 
-void mods_enable(char* relativePath) {
-    if (!relativePath) { return; }
+bool mods_enable(const char* relativePath) {
+    if (!relativePath) { return false; }
 
     for (unsigned int i = 0; i < gLocalMods.entryCount; i++) {
         struct Mod* mod = gLocalMods.entries[i];
         if (!strcmp(relativePath, mod->relativePath)) {
             mod->enabled = true;
-            break;
+            return true;
         }
     }
+
+    return false;
+}
+
+bool mods_disable(const char* relativePath) {
+    if (!relativePath) { return false; }
+
+    for (unsigned int i = 0; i < gLocalMods.entryCount; i++) {
+        struct Mod* mod = gLocalMods.entries[i];
+        if (!strcmp(relativePath, mod->relativePath)) {
+            mod->enabled = false;
+            return true;
+        }
+    }
+
+    return false;
 }
 
 void mods_init(void) {
