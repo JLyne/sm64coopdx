@@ -456,6 +456,7 @@ enum KEY_ACTION{
 	CTRL_F = 6,         /* Ctrl-f */
 	CTRL_H = 8,         /* Ctrl-h */
 	TAB = 9,            /* Tab */
+	NEWLINE = 10,       /* Newline */
 	CTRL_K = 11,        /* Ctrl+k */
 	CTRL_L = 12,        /* Ctrl+l */
 	ENTER = 13,         /* Enter */
@@ -560,7 +561,7 @@ static int enableRawMode(int fd) {
     raw.c_cc[VMIN] = 1; raw.c_cc[VTIME] = 0; /* 1 byte, no timer */
 
     /* put terminal in raw mode after flushing */
-    if (tcsetattr(fd,TCSAFLUSH,&raw) < 0) goto fatal;
+    if (tcsetattr(fd,TCSANOW,&raw) < 0) goto fatal;
     rawmode = 1;
     return 0;
 
@@ -576,7 +577,7 @@ static void disableRawMode(int fd) {
         return;
     }
     /* Don't even check the return value as it's too late. */
-    if (rawmode && tcsetattr(fd,TCSAFLUSH,&orig_termios) != -1)
+    if (rawmode && tcsetattr(fd,TCSANOW,&orig_termios) != -1)
         rawmode = 0;
 }
 
@@ -1342,6 +1343,7 @@ char *linenoiseEditFeed(struct linenoiseState *l) {
 
     switch(c) {
     case ENTER:    /* enter */
+    case NEWLINE:    /* newline */
         history_len--;
         free(history[history_len]);
         if (mlmode) linenoiseEditMoveEnd(l);
