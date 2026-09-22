@@ -85,4 +85,5 @@ void djui_panel_join_message_create(struct DjuiBase* caller) {
     djui_panel_add(caller, panel, NULL);
     gDjuiPanelJoinMessageVisible = true;
     sDisplayingError = false;
+    gDjuiInInitialSetup = false;
 }

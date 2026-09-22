@@ -18,7 +18,6 @@ static bool sTrue = true;
 static bool sFalse = false;
 static const char *sLastLang = NULL;
 static struct DjuiBase* sLayoutBase = NULL;
-bool gPanelLanguageOnStartup = false;
 
 static void select_language(struct DjuiBase* caller) {
     // god this is so hacky and terrible
@@ -42,7 +41,7 @@ static void select_language(struct DjuiBase* caller) {
     checkbox->base.interactable->update_style(caller);
 }
 
-static bool djui_panel_language_set(UNUSED struct DjuiBase* caller) {
+static void djui_panel_language_set(UNUSED struct DjuiBase* caller) {
     // god this is so hacky and terrible
     if (sLastLang != NULL && strcmp(configLanguage, sLastLang)) {
         snprintf(configLanguage, MAX_CONFIG_STRING, "%s", sLastLang);
@@ -53,12 +52,13 @@ static bool djui_panel_language_set(UNUSED struct DjuiBase* caller) {
             snprintf(configLanguage, MAX_CONFIG_STRING, "%s", "");
         }
 
-        if (gPanelLanguageOnStartup) {
+        if (gDjuiInInitialSetup) {
             djui_panel_shutdown();
             gDjuiInMainMenu = true;
             djui_panel_playerlist_create(NULL);
             djui_panel_modlist_create(NULL);
             djui_panel_main_create(NULL);
+            gDjuiInInitialSetup = true; // djui_panel_main_create resets this
         } else if (gDjuiInMainMenu) {
             djui_panel_shutdown();
             gDjuiInMainMenu = true;
@@ -80,7 +80,13 @@ static bool djui_panel_language_set(UNUSED struct DjuiBase* caller) {
         snprintf(configLanguage, MAX_CONFIG_STRING, "%s", "English");
     }
     newcam_init_settings();
-    gPanelLanguageOnStartup = false;
+    if (gDjuiInInitialSetup) {
+        djui_initial_setup_step_2(caller);
+    }
+}
+
+static bool djui_panel_language_on_back(UNUSED struct DjuiBase* caller) {
+    djui_panel_language_set(caller);
     return sLastLang == NULL;
 }
 
@@ -162,10 +168,17 @@ void djui_panel_language_create(struct DjuiBase* caller) {
         panel->bodySize.value = paginated->base.height.value + 16 + 64;
 
 skip_langs:
-        djui_button_create(body, DLANG(MENU, BACK), DJUI_BUTTON_STYLE_BACK, djui_panel_menu_back);
+        if (gDjuiInInitialSetup) {
+            djui_button_create(body, DLANG(MENU, CONTINUE), DJUI_BUTTON_STYLE_BACK, djui_panel_language_set);
+        } else {
+            djui_button_create(body, DLANG(MENU, BACK), DJUI_BUTTON_STYLE_BACK, djui_panel_menu_back);
+        }
     }
 
     struct DjuiPanel* p = djui_panel_add(caller, panel, NULL);
     if (!p) { return; }
-    p->on_back = djui_panel_language_set;
+
+    if (!gDjuiInInitialSetup) {
+        p->on_back = djui_panel_language_on_back;
+    }
 }

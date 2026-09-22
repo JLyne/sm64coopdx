@@ -43,6 +43,7 @@ extern struct DjuiText* gDjuiModReload;
 extern bool gDjuiInMainMenu;
 extern bool gDjuiInPlayerMenu;
 extern bool gDjuiDisabled;
+extern bool gDjuiInInitialSetup;
 
 void djui_init(void);
 void djui_init_late(void);
@@ -52,5 +53,8 @@ void djui_lua_error(char* text, struct DjuiColor color);
 void djui_lua_error_clear(void);
 void djui_render(void);
 void djui_reset_hud_params(void);
+void djui_initial_setup_step_1(struct DjuiBase* caller);
+void djui_initial_setup_step_2(struct DjuiBase* caller);
+void djui_initial_setup_complete(struct DjuiBase* caller);
 
 void djui_shutdown(void);
