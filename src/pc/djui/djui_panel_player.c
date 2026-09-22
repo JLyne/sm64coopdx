@@ -534,7 +534,12 @@ void djui_panel_player_create(struct DjuiBase* caller) {
 
         djui_button_create(body, DLANG(PLAYER, EDIT_PALETTE), DJUI_BUTTON_STYLE_NORMAL, djui_panel_player_edit_palette_create);
         djui_button_create(body, DLANG(PLAYER, ACTIVE_PALETTE), DJUI_BUTTON_STYLE_NORMAL, djui_panel_player_name_active_palette);
-        djui_button_create(body, DLANG(MENU, BACK), DJUI_BUTTON_STYLE_BACK, djui_panel_menu_back);
+
+        if (gDjuiInInitialSetup) {
+            djui_button_create(body, DLANG(MENU, CONTINUE), DJUI_BUTTON_STYLE_BACK, djui_initial_setup_complete);
+        } else {
+            djui_button_create(body, DLANG(MENU, BACK), DJUI_BUTTON_STYLE_BACK, djui_panel_menu_back);
+        }
 
         {
             struct DjuiText *text = djui_text_create(body, DLANG(PLAYER, CAP_TOGGLE));

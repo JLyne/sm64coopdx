@@ -15,6 +15,7 @@
 #include "pc/lua/smlua_hooks.h"
 #include "djui_panel_playerlist.h"
 #include "djui_hud_utils.h"
+#include "djui_panel_player.h"
 #include "engine/math_util.h"
 #include "pc/utils/misc.h"
 
@@ -32,6 +33,7 @@ bool gDjuiInPlayerMenu = false;
 bool gDjuiDisabled = false;
 bool gDjuiShuttingDown = false;
 bool gDjuiChangingTheme = false;
+bool gDjuiInInitialSetup = false;
 static bool sDjuiInited = false;
 static struct DjuiRoot* sDjuiRootBehind = NULL;
 
@@ -137,12 +139,28 @@ void djui_init(void) {
 void djui_init_late(void) {
     djui_panel_main_create(NULL);
     if (configLanguage[0] == '\0') {
-        gPanelLanguageOnStartup = true;
-        djui_panel_language_create(NULL);
+        gDjuiInInitialSetup = true;
+        djui_initial_setup_step_1(NULL);
     }
 
     // djui_panel_debug_create();
     djui_cursor_create();
+}
+
+void djui_initial_setup_step_1(struct DjuiBase* caller) {
+    if (!gDjuiInInitialSetup) return;
+    djui_panel_language_create(caller);
+}
+
+void djui_initial_setup_step_2(struct DjuiBase* caller) {
+    if (!gDjuiInInitialSetup) return;
+    djui_panel_player_create(caller);
+}
+
+void djui_initial_setup_complete(struct DjuiBase* caller) {
+    if (!gDjuiInInitialSetup) return;
+    gDjuiInInitialSetup = false;
+    djui_panel_main_create(caller);
 }
 
 void djui_connect_menu_open(void) {
