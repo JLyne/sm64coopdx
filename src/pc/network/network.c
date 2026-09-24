@@ -557,8 +557,6 @@ static void network_reconnect_update(void) {
     }
 
     network_init(NT_CLIENT, true);
-
-    network_send_mod_list_request();
 }
 
 bool network_is_reconnecting(void) {
