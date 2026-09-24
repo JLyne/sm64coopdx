@@ -43,11 +43,8 @@ void network_receive_kick(struct Packet* p) {
     }
 
     if (kickReason == EKT_REJOIN) {
-        if ((now - sLastReconnectTime) > 3) {
-            sLastReconnectTime = now;
-            network_reconnect_begin();
-            djui_popup_create(DLANG(NOTIF, DISCONNECT_REJOIN), 1);
-        }
+        network_reconnect_begin();
+        djui_popup_create(DLANG(NOTIF, DISCONNECT_REJOIN), 1);
     } else {
         network_shutdown(false, false, false, false);
     }
