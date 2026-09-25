@@ -245,7 +245,7 @@ void network_receive_join(struct Packet* p) {
         return;
     }
 
-    network_player_connected(NPT_SERVER, 0, 0, &DEFAULT_MARIO_PALETTE, "Player", "0");
+    network_player_connected(NPT_SERVER, 0, 0, &DEFAULT_MARIO_PALETTE, "Server", "0");
     network_player_connected(NPT_LOCAL, myGlobalIndex, configPlayerModel, &configPlayerPalette, configPlayerName, get_local_discord_id());
     djui_chat_box_create();
 
