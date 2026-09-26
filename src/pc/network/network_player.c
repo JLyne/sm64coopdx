@@ -471,7 +471,7 @@ void network_player_update_course_level(struct NetworkPlayer* np, s16 courseNum,
     // display popup
     bool inCredits = (np->currActNum == 99);
 
-    if (np->currCourseNum != courseNum && np->localIndex != 0 && !inCredits) {
+    if (gReceivedPlayerList && np->currCourseNum != courseNum && np->localIndex != 0 && !inCredits) {
         bool matchingLocal = (np->currCourseNum == gNetworkPlayerLocal->currCourseNum) && (np->currActNum == gNetworkPlayerLocal->currActNum);
 
         if (matchingLocal && gNetworkPlayerLocal->currCourseNum != 0) {
